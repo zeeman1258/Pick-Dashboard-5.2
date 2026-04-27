@@ -1,0 +1,23 @@
+Web deployment notes
+
+1. Copy the app folder to your server, example: /opt/pick-dashboard
+2. Create a .env file from .env.example and set a strong SECRET_KEY and MAIN_ADMIN_PASSWORD
+3. Install dependencies:
+   pip install -r requirements.txt
+4. Test locally on the server:
+   gunicorn -c gunicorn.conf.py wsgi:app
+5. Install the systemd service files:
+   sudo cp pick-dashboard.service /etc/systemd/system/
+   sudo cp pick-dashboard-restart.service /etc/systemd/system/
+   sudo cp pick-dashboard-restart.timer /etc/systemd/system/
+6. Reload systemd and enable services:
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now pick-dashboard.service
+   sudo systemctl enable --now pick-dashboard-restart.timer
+7. Optional reverse proxy with nginx to expose the app on your domain.
+
+Notes:
+- The timer restarts the app every night at 3:00 AM server time.
+- Admin users also get a Restart app button in the top-left area of the dashboard.
+- Ticket archive files are written immediately when tickets change.
+- Requests are stored in the requests folder and user subfolders.

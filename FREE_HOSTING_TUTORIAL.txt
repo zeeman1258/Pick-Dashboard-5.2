@@ -1,0 +1,61 @@
+Free hosting tutorial for Pick Dashboard (updated for version 1.7)
+
+Best free public option to test this app: Render.
+Why:
+- Render documents Flask deployment directly and supports Gunicorn web services.
+- Render supports environment variables in the dashboard.
+- Railway is not the best choice for truly free long-term use.
+- PythonAnywhere is another free option, but it is more limited and usually uses a username-based subdomain.
+
+Very important warning:
+- This app currently stores SQLite data, request archives, and users.txt on local disk.
+- Render persistent disks require a paid service, not a free one.
+- That means free Render hosting is okay for testing, demos, and light temporary use, but not ideal for important long-term stored data.
+- If you need reliable permanent storage, move later to a paid host or a VPS.
+
+====================================
+FASTEST FREE DEPLOY - RENDER
+====================================
+
+Step 1 - Make sure your files are ready
+Your package already includes:
+- app.py
+- wsgi.py
+- gunicorn.conf.py
+- requirements.txt
+- .env.example
+
+Step 2 - Create a GitHub repo
+1. Extract the zip on your computer.
+2. Put the files into a folder.
+3. Open terminal in that folder.
+4. Run:
+   git init
+   git add .
+   git commit -m "Pick Dashboard 5.2"
+5. Create a new GitHub repository.
+6. Connect and push:
+   git remote add origin YOUR_GITHUB_REPO_URL
+   git branch -M main
+   git push -u origin main
+
+Step 3 - Create the Render service
+1. Sign in to Render.
+2. Click New +.
+3. Choose Web Service.
+4. Connect GitHub.
+5. Select your repo.
+6. Set:
+   - Runtime: Python
+   - Build command: pip install -r requirements.txt
+   - Start command: gunicorn -c gunicorn.conf.py wsgi:app
+7. Choose the free instance if available.
+8. Click Create Web Service.
+
+Step 4 - Add environment variables in Render
+Open your Render service and add:
+- SECRET_KEY = a long random secret
+- MAIN_ADMIN_USERNAME = zeck
+- MAIN_ADMIN_PASSWORD = choose your password
+- HOST = 0.0.0.0
+- Do not add PORT manually on Render unless you have a special reason; Render provides it automatically.
